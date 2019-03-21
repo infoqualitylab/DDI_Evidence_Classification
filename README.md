@@ -42,3 +42,10 @@ https://github.com/infoqualitylab/DDI_Evidence_Classification/
 o	Preprocess text of the Methods section: eliminate special characters, stop words, numbers. 
 
 #### Script 3 – “Extract_Drug_Entities_MetaMap_Results.ipynb”
+
+- This script is used to extract drug entities from MetaMap result files. 
+
+#### Script 4 - "Classifiers.ipynb"
+
+- 
+
