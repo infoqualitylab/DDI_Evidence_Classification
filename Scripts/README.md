@@ -1,12 +1,14 @@
 ## Python Programs Description
 
+*Note: all data files that needed to run these programs are provided in the Data folder
+
 ### Program 1 – “Getting_articles_metadata.ipynb”
-* This script is used to get metadata of the articles which were used in our project. The metadata is collected from PubMed API including: article PubMed ID, title, abstract, publication type and Mesh headings.
-* Input: a text file that contains a list of PubMed Identifiers of papers (Available in Data folder: All_Papers_PMIDs.txt)
-* Output: an Excel file that contains the papers with their metadata (Available in Data folder: All_Papers_Metadata.xlsx)
+* This program is used to get metadata of the articles which were used in our project. The metadata is collected from PubMed API including: article PubMed ID, title, abstract, publication type and Mesh headings.
+* Input: a text file that contains a list of PubMed Identifiers of papers (Available in Data folder: **All_Papers_PMIDs.txt**)
+* Output: an Excel file that contains the papers with their metadata (Available in Data folder: **All_Papers_Metadata.xlsx**)
 
 ### Program 2 – “Preprocess_fulltext_articles.ipynb”
-* This script contains 3 sub-programs:
+* This program contains 3 sub-programs:
   - A program to convert full-text papers from PDFs to plaintext
   - A program to extract text of “Methods” sections from the plaintext papers
   - A program to preprocess the text of “Methods” sections
@@ -27,42 +29,43 @@
   - Output: “clean” plaintext files of Methods section
   - Preprocess: remove stopwords (using NLTK), remove spaces and some special characters
 
-*NOTE: Output of this step is a single csv file that contains all papers, their metadata (collected by script 1) and Methods section text (collected by script 2) (Available in Data folder: All_Papers_Preprocessed.csv. Note that this file also contains expert’s labels for classification development)
+*NOTE: Output of this step is a single csv file that contains all papers, their metadata (collected by script 1) and Methods section text (collected by script 2) (Available in Data folder: **All_Papers_Preprocessed.csv**. Note that this file also contains expert’s labels for classification development)
 
 ### Program 3 – “Most_informative_unigrams.ipynb”
-
-* This script is used to get lists of most informative features (unigrams) from our data (text from title, abstract & method section); selected based on the TFIDF scores of the features. 
-* Input: the All_Papers_Preprocessed.csv file. Note that this file also contains expert’s labels for classification development. 
+* This program is used to get lists of most informative features (unigrams) from our data (text from title, abstract & method section); selected based on the TFIDF scores of the features. 
+* Input: the **All_Papers_Preprocessed.csv** file. Note that this file also contains expert’s labels for classification development. 
 * Output: lists of 20 most informative unigrams for each type in the six evidence types of the study. 
 
-Script 4 - “Multiclass_classifier.ipynb”
+### Program 4 - “Multiclass_classifier.ipynb”
+* This program is used to implement the multi class classifier to predict six evidence types (no hierarchy involved). 
+* Input: the **"All_Papers_Preprocessed.csv"** file.
+* Classifier implementation: 
+  - Data: split training 80%; testing 20%
+  - Features: unigrams of text from Title, Abstract, Methods section (TFIDF)
+  - Feature selection: top 5000 best features by Chi-square test
+  - ML model: SVM (some parameters: kernel, class weighted)
+  - Evaluation metrics: Accuracy, Precision, Recall, F1 score (note: AUC ROC is not applicable for multi class problem)
+* Evaluate classifier on a set of unlabeled dataset: 
+  - Save the classification model and rerun it on an unlabeled dataset
+  - Input: the **"Unlabeled_Papers_Evaluation.csv"** file 
+  - Output: prediction of evidence types which the papers provide.  
 
-Implement the multi class classifier to predict six evidence types (no hierarchy involved). 
-Input: the All_Papers_Preprocessed.csv file.
-Classifier implementation: 
-Data: split training 80%; testing 20%
-Features: unigrams of text from Title, Abstract, Methods section (TFIDF)
-Feature selection: top 5000 best features by Chi-square test
-ML model: SVM
-Evaluation metrics: Accuracy, Precision, Recall, F1 score (note: AUC ROC is not applicable for multi class problem)
-Evaluate classifier on a set of unlabeled dataset: 
-Save the classification model and rerun it on an unlabeled dataset
-Input: text from title, abstract & methods section of unlabeled papers. 
-Output: prediction of what evidence types the papers provide. 
-Script 5 - “Hierarchical_classifier.ipynb”
-
-Implement the hierarchical classifier to predict six evidence types
-Input: the All_Papers_Preprocessed.csv file.
-Classifier implementation: 
-Cross-validation: 5 folds 
-In each cross validation: 
-Data: split training 80%; testing 20%
-Start from top-level sub-classifier to lower-level sub-classifiers. 
-Features: unigrams of text from Title, Abstract, Methods section (TFIDF)
-Feature selection: top 5000 best features by Chi-square test
-ML model: SVM
-Evaluation metrics: Accuracy, Precision, Recall, F1 score and AUC ROC of sub-classifiers individually. 
-Evaluate classifier on a set of unlabeled dataset: 
-Save the classification model and rerun it on an unlabeled dataset
-Input: text from title, abstract & methods section of unlabeled papers. 
-Output: prediction of what evidence types the papers provide. 
+### Program 5 - “Hierarchical_classifier.ipynb”
+* Implement the hierarchical classifier to predict six evidence types
+* Input: the **"All_Papers_Preprocessed.csv"** file.
+* Classifier implementation: 
+  - Cross-validation: 5 folds 
+  - In each cross validation: 
+    + Data: split training 80%; testing 20%
+    + Start from top-level sub-classifier to lower-level sub-classifiers. 
+    + Features: unigrams of text from Title, Abstract, Methods section (TFIDF)
+    + Feature selection: top 5000 best features by Chi-square test
+    + ML model: SVM (some parameters: kernel, class weighted)
+    + Evaluation metrics: Accuracy, Precision, Recall, F1 score and AUC ROC of sub-classifiers individually. 
+* Evaluate classifier on a set of unlabeled dataset: 
+  - Save the classification model and rerun it on an unlabeled dataset
+  - Input: the **"Unlabeled_Papers_Evaluation.csv"** file 
+  - Output: prediction of evidence types which the papers provide. 
+  
+  
+ 
